@@ -1,0 +1,270 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+const CongratulationsWebsite = () => {
+  const [showMessage, setShowMessage] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [musicPlaying, setMusicPlaying] = useState(false);
+  const [showVideoBackground, setShowVideoBackground] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  useEffect(() => {
+    // Auto-show message after a short delay
+    const timer = setTimeout(() => {
+      setShowMessage(true);
+      setShowConfetti(true);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const toggleMusic = () => {
+    if (audioRef.current) {
+      if (musicPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play();
+      }
+      setMusicPlaying(!musicPlaying);
+    }
+  };
+
+  const toggleBackground = () => {
+    setShowVideoBackground(!showVideoBackground);
+  };
+
+  return (
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-pink-100 to-purple-200">
+      {/* Background Video */}
+      {showVideoBackground && (
+        <div className="absolute inset-0 z-0">
+          <video
+            autoPlay
+            loop
+            muted
+            className="w-full h-full object-cover opacity-40"
+          >
+            <source
+              src="https://placeholder-image-service.onrender.com/video/1280x720?prompt=Soft%20pastel%20abstract%20background%20with%20gentle%20flowing%20colors%20and%20subtle%20movement&id=video-bg-1"
+              type="video/mp4"
+            />
+          </video>
+        </div>
+      )}
+
+      {/* Background Music */}
+      <audio
+        ref={audioRef}
+        loop
+        src="https://freesound.org/data/previews/612/612611_5674468-lq.mp3"
+      />
+
+      {/* Confetti Effect */}
+      {showConfetti && (
+        <div className="fixed inset-0 z-50 pointer-events-none">
+          {[...Array(50)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-2 h-2 bg-yellow-400 rounded-full"
+              initial={{
+                x: Math.random() * window.innerWidth,
+                y: -20,
+                rotate: Math.random() * 360,
+              }}
+              animate={{
+                y: window.innerHeight + 20,
+                opacity: [1, 0.8, 0],
+              }}
+              transition={{
+                duration: Math.random() * 3 + 2,
+                repeat: Infinity,
+                delay: Math.random() * 2,
+              }}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Main Content */}
+      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center p-8">
+        <AnimatePresence>
+          {showMessage && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, y: 100, rotate: -5 }}
+              animate={{ opacity: 1, scale: 1, y: 0, rotate: 0 }}
+              transition={{ duration: 1.2, type: "spring", bounce: 0.4 }}
+              className="text-center max-w-4xl mx-auto"
+            >
+              <motion.h1
+                className="text-5xl md:text-7xl font-bold text-purple-700 mb-6"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5, duration: 1 }}
+              >
+                🎉 Congratulations Nanhu! 🎉
+              </motion.h1>
+
+              <motion.div
+                className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 md:p-12 shadow-2xl border-2 border-purple-200"
+                initial={{ opacity: 0, y: 50, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ delay: 0.8, duration: 1, type: "spring", stiffness: 100 }}
+              >
+                <motion.p
+                  className="text-xl md:text-2xl text-gray-800 leading-relaxed mb-6"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 1.2, duration: 0.8 }}
+                >
+                  My dearest Nanhu,
+                </motion.p>
+
+                <motion.p
+                  className="text-lg md:text-xl text-purple-600 leading-relaxed mb-4 font-medium"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 1.5, duration: 0.8 }}
+                >
+                  Aapne apna pehla salary earn kiya hai aur main aapko dekh kar 
+                  itna proud feel kar raha hoon! 🥹
+                </motion.p>
+
+                <motion.p
+                  className="text-lg md:text-xl text-purple-600 leading-relaxed mb-4 font-medium"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 1.8, duration: 0.8 }}
+                >
+                  English tutoring mein aapki dedication aur hard work dekh kar 
+                  dil khush ho gaya. Aap truly amazing ho! 💖
+                </motion.p>
+
+                <motion.p
+                  className="text-lg md:text-xl text-purple-600 leading-relaxed mb-6 font-medium"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 2.1, duration: 0.8 }}
+                >
+                  Yeh sirf starting hai - aage aap aur bhi achieve karogi! 
+                  Keep shining my star! ✨
+                </motion.p>
+
+                <motion.p
+                  className="text-xl md:text-2xl text-pink-600 font-semibold drop-shadow-sm"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 2.4, duration: 0.8 }}
+                >
+                  With all my love,<br />
+                  Always yours 💕
+                </motion.p>
+              </motion.div>
+
+              {/* Interactive Buttons */}
+              <motion.div
+                className="flex flex-wrap justify-center gap-4 mt-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 2.8, duration: 0.6 }}
+              >
+                <motion.button
+                  whileHover={{ scale: 1.1, rotate: 2, transition: { type: "spring", stiffness: 300 } }}
+              whileTap={{ scale: 0.9, rotate: -2 }}
+                  onClick={toggleMusic}
+                  className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-full font-semibold shadow-lg transition-colors"
+                >
+                  {musicPlaying ? '🔇 Pause Music' : '🎵 Play Music'}
+                </motion.button>
+
+                <motion.button
+                  whileHover={{ scale: 1.1, rotate: 2, transition: { type: "spring", stiffness: 300 } }}
+              whileTap={{ scale: 0.9, rotate: -2 }}
+                  onClick={toggleBackground}
+                  className="bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 rounded-full font-semibold shadow-lg transition-colors"
+                >
+                  {showVideoBackground ? '🖼️ Image Background' : '🎥 Video Background'}
+                </motion.button>
+
+                <motion.button
+                  whileHover={{ scale: 1.1, rotate: 2, transition: { type: "spring", stiffness: 300 } }}
+              whileTap={{ scale: 0.9, rotate: -2 }}
+                  onClick={() => setShowConfetti(!showConfetti)}
+                  className="bg-yellow-400 hover:bg-yellow-500 text-purple-800 px-6 py-3 rounded-full font-semibold shadow-lg transition-colors"
+                >
+                  {showConfetti ? '🎊 Hide Confetti' : '🎊 Show Confetti'}
+                </motion.button>
+              </motion.div>
+
+              {/* Floating Hearts */}
+              <div className="fixed inset-0 pointer-events-none z-30">
+                {[...Array(15)].map((_, i) => (
+                  <motion.div
+                    key={i}
+                    className="absolute text-2xl text-pink-400"
+                    initial={{
+                      x: Math.random() * window.innerWidth,
+                      y: window.innerHeight + 50,
+                      rotate: Math.random() * 360,
+                    }}
+                    animate={{
+                      y: -50,
+                      opacity: [0, 1, 0],
+                    }}
+                    transition={{
+                      duration: Math.random() * 4 + 3,
+                      repeat: Infinity,
+                      delay: Math.random() * 2,
+                    }}
+                  >
+                    ❤️
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Loading State */}
+        {!showMessage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center"
+          >
+            <motion.div
+              animate={{ rotate: 360, scale: [1, 1.1, 1] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+              className="w-16 h-16 border-4 border-purple-400 border-t-transparent rounded-full mx-auto mb-4"
+            />
+            <p className="text-purple-600 text-lg font-semibold">
+              Preparing something special...
+            </p>
+          </motion.div>
+        )}
+      </div>
+
+      {/* Decorative Elements */}
+      <div className="absolute bottom-4 right-4 z-20">
+        <motion.div
+          animate={{ rotate: [0, 20, -20, 0], scale: [1, 1.1, 1] }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          className="text-4xl text-purple-400"
+        >
+          🌟
+        </motion.div>
+      </div>
+
+      <div className="absolute top-4 left-4 z-20">
+        <motion.div
+          animate={{ scale: [1, 1.3, 1], rotate: [0, 15, 0, -15, 0] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          className="text-4xl text-pink-400"
+        >
+          ✨
+        </motion.div>
+      </div>
+    </div>
+  );
+};
+
+export default CongratulationsWebsite;
